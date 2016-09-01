@@ -4,7 +4,8 @@ using System.Collections;
 public class CreatorScript : MonoBehaviour {
     public GameObject[] Patterns;
     public float spawnerTimer;
-    public int condition;
+    public int minCondition, maxCondition;
+    int condition;
     float lastPosition;
     float timer;
 	// Use this for initialization
@@ -12,6 +13,7 @@ public class CreatorScript : MonoBehaviour {
         timer = spawnerTimer;
         lastPosition = transform.position.y;
         Spawn();
+        condition = Random.Range(minCondition, maxCondition);
 	
 	}
 	
@@ -21,11 +23,12 @@ public class CreatorScript : MonoBehaviour {
         timer -= Time.fixedDeltaTime;
         if (timer<0)
         {
-            if (transform.position.y - lastPosition > condition)            // спавн препятсвий через определенное кол-во метровы
+            if (transform.position.y - lastPosition > condition)            // спавн препятсвий через определенное кол-во метров
             {
                 Spawn();
                 timer = spawnerTimer;
                 lastPosition = transform.position.y;
+                condition = Random.Range(minCondition, maxCondition);
             }
         }
 	}
