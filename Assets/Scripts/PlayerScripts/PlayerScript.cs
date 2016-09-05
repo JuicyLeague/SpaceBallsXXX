@@ -3,7 +3,9 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour {
 
-    DashStatus dashStatus = DashStatus.Ready;
+
+
+   
     [HideInInspector] public int deathcount = 0;
     bool moving = false;
     private float yVelocity = 0.0F;
@@ -14,19 +16,30 @@ public class PlayerScript : MonoBehaviour {
 
     GameObject universe;
 
-    ParticleSystem dashEffect;
-    float cameraDashSpeed = 0;
-    public float dashMultiplier;
-    public float dashTimer;
-    float currentDashTimer;
-    public float cooldownDashTimer;
+    
 
     void Start()
     {
-        dashEffect = GameObject.Find("DashEffect").GetComponent<ParticleSystem>();
-        currentDashTimer = dashTimer;
 
         universe = GameObject.Find("Universe center");
+    }
+
+    public void TurnLeft()
+    {
+        if (current_line != 1)
+        {
+            current_line -= 1;
+            targetFloat = (current_line - 2) * 2 - 2;
+        }
+    }
+
+    public void TurnRight()
+    {
+        if (current_line != 5)
+        {
+            current_line += 1;
+            targetFloat = (current_line - 2) * 2 - 2;
+        }
     }
 
 
@@ -34,8 +47,8 @@ public class PlayerScript : MonoBehaviour {
     {
        
 
-        if (Input.GetKeyDown(KeyCode.A) & current_line != 1 )
-            {
+        if (Input.GetKeyDown(KeyCode.A) & current_line != 1)           // Возможно ты не видишь, но тут костыль для возможности управления на компе (не забыть убрать в финалке)
+        {                                                              // Я сейчас про весь Update()
             current_line -= 1;
             targetFloat =  (current_line-2) * 2 - 2;     
             }
@@ -46,50 +59,7 @@ public class PlayerScript : MonoBehaviour {
             targetFloat = (current_line - 2) * 2 - 2;
         }
 
-        if (Input.GetKeyDown(KeyCode.W) & dashStatus == DashStatus.Ready)               // Весь Dash ниже
-        {
-            universe.GetComponent<SpeedUpScript>().stopSpeedUp = true;
-            universe.GetComponent<Rigidbody2D>().velocity *= dashMultiplier; 
-            dashStatus = DashStatus.Dashing;
-            dashEffect.Play();
-        }
 
-        if (dashStatus == DashStatus.Dashing)
-        {
-
-            if (currentDashTimer > 0)
-            {
-                currentDashTimer -= Time.deltaTime;
-                cameraDashSpeed+= 1 * Time.deltaTime;
-                GameObject.FindGameObjectWithTag("MainCamera").GetComponent<TargetFollowScript>().offset = Mathf.Lerp(0, -1, cameraDashSpeed);
-            }
-            else
-            {
-                dashEffect.Stop();
-                cameraDashSpeed = 0;
-                universe.GetComponent<Rigidbody2D>().velocity /= dashMultiplier;
-                universe.GetComponent<SpeedUpScript>().stopSpeedUp = false;
-                dashStatus = DashStatus.Cooldown;
-                currentDashTimer = cooldownDashTimer;
-            }
-        }
-            
-        if (dashStatus == DashStatus.Cooldown)
-            {
-                if (currentDashTimer > 0)
-                {
-                    currentDashTimer -= Time.deltaTime;
-                    cameraDashSpeed += 1 * Time.deltaTime;
-                    GameObject.FindGameObjectWithTag("MainCamera").GetComponent<TargetFollowScript>().offset = Mathf.Lerp(-1, 0, cameraDashSpeed);
-                }
-                    
-                else
-                {
-                    cameraDashSpeed = 0;  
-                    dashStatus = DashStatus.Ready;
-                    currentDashTimer = dashTimer;   
-                }
-            }                                                                           // Конец Dash
         
 
 
@@ -101,12 +71,18 @@ public class PlayerScript : MonoBehaviour {
 
 
 
-    enum DashStatus {Ready, Dashing, Cooldown };
+
 
     void FixedUpdate()
     {
         if (Input.GetKeyDown(KeyCode.R))
-            Application.LoadLevel(0);
+            if (Time.timeScale < 1F)
+            {
+                Time.timeScale = 1.0F;
+                Time.fixedDeltaTime = 0.02F * Time.timeScale;
+                Application.LoadLevel(0);
+            }
+            
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
 
@@ -117,7 +93,7 @@ public class PlayerScript : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Wall" & dashStatus != DashStatus.Dashing)
+        if (other.tag == "Wall" & GetComponent<DashScript>().dashStatus != DashScript.DashStatus.Dashing)
         {
             deathcount += 1;
         }
