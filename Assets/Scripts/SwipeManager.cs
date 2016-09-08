@@ -3,6 +3,7 @@ using System.Collections;
 
 public class SwipeManager : MonoBehaviour {
     float dpiScale;                                                              // px = dp * (dpi / 160)
+    Touch touch;
     bool fingerTrack, cancelSwipe = false;
     public float swipeOffsetX, swipeOffsetY = 50F;
     Vector2 startTouchPosition, currentTouchPosition;
@@ -23,52 +24,52 @@ public class SwipeManager : MonoBehaviour {
         swipeOffsetY = swipeOffsetY * dpiScale;
     }
 	
-	// Update is called once per frame
 	void Update () {
         if (Input.touchCount > 0)
-        {
-            foreach(Touch touch in Input.touches)
+            touch = Input.GetTouch(0);
+
+        if (Input.touchCount == 1 & cancelSwipe == false)                                   // Swipe start
+        {  
+            if (touch.phase == TouchPhase.Began)
             {
-                if (fingerTrack == false & touch.phase == TouchPhase.Began)
-                {
-                    fingerTrack = true;
-                    startTouchPosition = touch.position;
-                }
-                if (fingerTrack == true & touch.phase == TouchPhase.Began)
-                    cancelSwipe = true;
-
-                if (fingerTrack == true & touch.phase == TouchPhase.Moved & cancelSwipe == false)
-                {
-                    currentTouchPosition = touch.position;
-                    if (Mathf.Abs(currentTouchPosition.x - startTouchPosition.x)> swipeOffsetX)
-                    {
-                        if (currentTouchPosition.x > startTouchPosition.x)
-                            playerScript.TurnRight();
-                        else
-                            playerScript.TurnLeft();
-
-                        fingerTrack = false;
-
-                    }
-                    if (Mathf.Abs(currentTouchPosition.y - startTouchPosition.y) > swipeOffsetY)
-                    {
-                        if (currentTouchPosition.y > startTouchPosition.y)
-                            dashScript.upSwipe = true;
-                        // up move
-                        else
-                            slowMoScript.downSwipe = true;
-                        //down move
-
-                        fingerTrack = false;
-
-                    }
-                }
+                startTouchPosition = touch.position;
             }
 
+            if (touch.phase == TouchPhase.Moved)
+            {
+                currentTouchPosition = touch.position;
+                if (Mathf.Abs(currentTouchPosition.x - startTouchPosition.x)> swipeOffsetX)
+                {
+                    if (currentTouchPosition.x > startTouchPosition.x)
+                        playerScript.TurnRight();
+                    else
+                        playerScript.TurnLeft();
+
+                    cancelSwipe = true;
+                }
+
+                if (Mathf.Abs(currentTouchPosition.y - startTouchPosition.y) > swipeOffsetY)
+                {
+                    if (currentTouchPosition.y > startTouchPosition.y)
+                        dashScript.upSwipe = true;
+                    // up move
+                    else
+                        slowMoScript.downSwipe = true;
+                    //down move
+                    cancelSwipe = true;
+                }
+            }
         }
-        
-        if (cancelSwipe == true)
-            cancelSwipe = false;
+
+        if (Input.touchCount > 1)
+            cancelSwipe = true;
+        if (Input.touchCount == 0)
+            cancelSwipe = false;                            // Swipe end
+
+        if (touch.tapCount == 2)
+        {
+            // Double tap action
+        }
     }
     void FixedUpdate()
     {
