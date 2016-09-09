@@ -7,6 +7,7 @@ public class PlayerScript : MonoBehaviour {
 
    
     [HideInInspector] public int deathcount = 0;
+    public int currentCoins = 0;
     bool moving = false;
     private float yVelocity = 0.0F;
     public float smoothTime = 0.1F;
@@ -93,6 +94,12 @@ public class PlayerScript : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.tag == "Coin")
+        {
+            currentCoins += 1;
+            Destroy(other.gameObject);
+        }
+
         if (other.tag == "Wall" & GetComponent<DashScript>().dashStatus != DashScript.DashStatus.Dashing)
         {
             deathcount += 1;

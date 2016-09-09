@@ -5,7 +5,7 @@ public class Destroyer : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if ( other.tag == "WallHolder")
+        if ( other.tag == "WallHolder" || other.tag == "Coin")
             Destroy(other.gameObject);
     }
 
