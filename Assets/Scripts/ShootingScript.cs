@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShoutingScript : MonoBehaviour {
+public class ShootingScript : MonoBehaviour {
 
     public static void Fire()
     {
@@ -9,10 +9,10 @@ public class ShoutingScript : MonoBehaviour {
         //GameObject player = GameObject.Find("Player");
         PlayerScript playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
 
-        if (playerScript.currentAmmo > 0)
+        if (playerScript.reloading == 0)
         {
             Instantiate(ammo, playerScript.gameObject.transform.position, Quaternion.identity);
-            playerScript.currentAmmo--;
+            playerScript.reloading = 3;
         }
 
     }

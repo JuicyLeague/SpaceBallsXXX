@@ -4,11 +4,9 @@ using System.Collections;
 public class PlayerScript : MonoBehaviour {
 
 
-
-   
     [HideInInspector] public int deathcount = 0;
     public int currentCoins = 0;
-    public int currentAmmo = 10;
+    public float reloading = 3;
     public float smoothTime = 15f;
 
     float targetFloat;
@@ -16,7 +14,6 @@ public class PlayerScript : MonoBehaviour {
 
     GameObject universe;
 
-    
 
     void Start()
     {
@@ -59,7 +56,7 @@ public class PlayerScript : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.F) & current_line != 5)
         {
-            ShoutingScript.Fire();
+            ShootingScript.Fire();
         }
 
         transform.position = Vector2.Lerp((Vector2)transform.position, new Vector2(targetFloat, transform.position.y), Time.deltaTime * smoothTime);            // новый способ перемещения
@@ -69,6 +66,15 @@ public class PlayerScript : MonoBehaviour {
 
     void FixedUpdate()
     {
+
+        if (reloading > 0)
+        {
+            reloading -= Time.deltaTime;
+        }
+        else
+        {
+            reloading = 0;
+        }
 
         if (Input.GetKeyDown(KeyCode.R))
             if (Time.timeScale < 1F)

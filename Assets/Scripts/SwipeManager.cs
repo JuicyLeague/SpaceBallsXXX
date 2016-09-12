@@ -69,6 +69,8 @@ public class SwipeManager : MonoBehaviour {
         if (touch.tapCount == 2)
         {
             // Double tap action
+            ShootingScript.Fire();
+            // Привязку делать не стал, т.к. метод static. К нему напрямую ссылаться можно, без потери ресурсов.
         }
     }
     void FixedUpdate()
