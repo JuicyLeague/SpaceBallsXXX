@@ -9,7 +9,8 @@ public class SpeedUpScript : MonoBehaviour {                // Данный ск
 
     bool gameOver = false;
 
-    float totalVelocity;
+    [HideInInspector]
+    public float totalVelocity;
     int freeArraySlot = 1;
 
     public float startingSpeed, maxSpeed, targetTime; // Ввод target time в минутах
@@ -57,6 +58,7 @@ public class SpeedUpScript : MonoBehaviour {                // Данный ск
 
     void ChangeVelocity()
     {
+        totalVelocity = 0;
         for (int i = 0; i <= (freeArraySlot - 1); i++)
             totalVelocity += VelocityArray[i];
         rb2d.velocity = new Vector2(0, totalVelocity);
@@ -65,7 +67,6 @@ public class SpeedUpScript : MonoBehaviour {                // Данный ск
             gameOver = true;
             rb2d.velocity = new Vector2(0, 0);
         }
-        totalVelocity = 0;
     }
 
     public int GetFreeVelocitySlot()

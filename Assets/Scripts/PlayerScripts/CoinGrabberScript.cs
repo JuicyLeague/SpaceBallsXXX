@@ -23,12 +23,15 @@ public class CoinGrabberScript : MonoBehaviour
 
     public float tickRate; // Интервал между тиками расхода топлива
     float currentTimer;
+    float timerForFuel;
+    bool consuptionCall = false;
 
 
     // Use this for initialization
     void Start()
     {
         currentTimer = tickRate;
+        timerForFuel = tickRate * 5;
         universeVelocity = GameObject.Find("Universe center").GetComponent<SpeedUpScript>();
         id = universeVelocity.GetFreeVelocitySlot();
         
@@ -37,50 +40,62 @@ public class CoinGrabberScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        //print(universeRb2d.velocity.y);
-        //print(GetComponent<Rigidbody2D>().velocity.y);
+        timerForFuel -= Time.fixedDeltaTime;
+        if (timerForFuel < 0)
+        {
+
+            if (fuelCapacity > 0)
+            {
+                if (fuelCapacity <= 100)
+                    fuelCapacity -= (int)fuelConsumption;
+                else
+                    fuelCapacity -= (int)accelerateFuelConsuption;
+            }
+
+            timerForFuel = tickRate * 5;
+        }
+
         currentTimer -= Time.fixedDeltaTime;
-        if (currentTimer < 0 & fuelCapacity > 0)
+        if (currentTimer < 0 )
         {
-            if (fuelCapacity <= 100)
-                fuelCapacity -= (int)fuelConsumption;
-            else
-                fuelCapacity -= (int)accelerateFuelConsuption;
+           
+
+
+
+            if (fuelCapacity > 1 & fuelCapacity < 100)
+            {
+                if (accelerateState == true)
+                {
+                    accelerateState = false;
+                    universeVelocity.SetVelocity(id, 0);
+                    lastAccelerate = 0;
+                    currentAccelerate = 0;
+                }
+                if (penaltyState == true)
+                {
+                    penaltyState = false;
+                    universeVelocity.SetVelocity(id, 0);
+                    stolenSpeed = 0;
+                }
+            }
+
+            if (fuelCapacity > 100)                  // Ускорение
+            {
+                currentAccelerate += universeVelocity.rawVelocity * acceleration;
+                universeVelocity.SetVelocity(id, currentAccelerate);
+                accelerateState = true;
+            }
+
+            if (fuelCapacity <= 0)
+            {
+                stolenSpeed += universeVelocity.rawVelocity * fuelPenalty;
+                universeVelocity.SetVelocity(id, -stolenSpeed);
+                penaltyState = true;
+
+            }
+
             currentTimer = tickRate;
-        }
-
-
-        if (fuelCapacity > 1 & fuelCapacity < 100)
-        {
-            if (accelerateState == true)
-            {
-                accelerateState = false;
-                universeVelocity.SetVelocity(id, 0);
-                lastAccelerate = 0;
-                currentAccelerate = 0;
-            }
-            if (penaltyState == true)
-            {
-                penaltyState = false;
-                universeVelocity.SetVelocity(id, 0);
-                stolenSpeed = 0;
-            }
-            return;
-        }
-
-        if (fuelCapacity > 100)                  // Ускорение
-        {
-            currentAccelerate += universeVelocity.rawVelocity * acceleration;
-            universeVelocity.SetVelocity(id, currentAccelerate);
-            accelerateState = true;
-        }
-
-        if (fuelCapacity <= 0)
-        {
-            stolenSpeed += universeVelocity.rawVelocity * fuelPenalty;
-            universeVelocity.SetVelocity(id,- stolenSpeed);
-            penaltyState = true;
-            
+            consuptionCall = !consuptionCall;
         }
 
         

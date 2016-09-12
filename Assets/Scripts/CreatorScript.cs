@@ -32,6 +32,7 @@ public class CreatorScript : MonoBehaviour {
             }
         }
 	}
+
     void Spawn()
     {
         Instantiate(Patterns[Random.Range(0, Patterns.GetLength(0))], transform.position, Quaternion.identity);
