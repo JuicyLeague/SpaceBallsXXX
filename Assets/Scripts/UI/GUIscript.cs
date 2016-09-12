@@ -4,9 +4,9 @@ using System.Collections;
 public class GUIscript : MonoBehaviour {
     public Rect deathCount;
     public Rect speedLvl;
-    public Rect coinCount;
+    public Rect coinCount, fuelCapacity;
     public GameObject universe;
-    public GameObject player; // Убрать в будущем
+    public GameObject player; 
 
 
 
@@ -17,6 +17,7 @@ public class GUIscript : MonoBehaviour {
     {
         GUI.Label(deathCount, "Death counter: " + player.GetComponent<PlayerScript>().deathcount);     // Подлежит удалению
         GUI.Label(speedLvl, "SpeedLvl: " + Mathf.Round(universe.GetComponent<Rigidbody2D>().velocity.magnitude));
-        GUI.Label(coinCount, "Coins: " + player.GetComponent<PlayerScript>().currentCoins);     
+        GUI.Label(coinCount, "Coins: " + player.GetComponent<PlayerScript>().currentCoins);
+        GUI.Label(fuelCapacity, "Capacity: " + player.GetComponent<CoinGrabberScript>().fuelCapacity);
     }
 }

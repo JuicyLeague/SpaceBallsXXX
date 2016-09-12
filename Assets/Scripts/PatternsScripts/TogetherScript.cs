@@ -3,7 +3,6 @@ using System.Collections;
 
 public class TogetherScript : MonoBehaviour
 {
-    private float yVelocity = 0.0F;
     public float smoothTime = 0.3F;
     public int direction;
     bool pushingFase = true;

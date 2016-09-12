@@ -7,6 +7,7 @@ public class DashScript : MonoBehaviour {
     public bool upSwipe = false;                        // эту ссанину переписать в виде функции
 
     GameObject universe;
+    SpeedUpScript universeVelocity;
 
     [HideInInspector]    public enum DashStatus { Ready, Dashing, Cooldown };
     [HideInInspector]    public DashStatus dashStatus = DashStatus.Ready;
@@ -14,8 +15,10 @@ public class DashScript : MonoBehaviour {
     float cameraDashSpeed = 0;
     public float dashMultiplier;
     public float dashTimer;
+    float currentDashSpeed;
     float currentDashTimer;
     public float cooldownDashTimer;
+    int id;
     
 
     // Use this for initialization
@@ -23,6 +26,8 @@ public class DashScript : MonoBehaviour {
         dashEffect = GameObject.Find("DashEffect").GetComponent<ParticleSystem>();
         currentDashTimer = dashTimer;
         universe = GameObject.Find("Universe center");
+        universeVelocity = universe.GetComponent<SpeedUpScript>();
+        id = universeVelocity.GetFreeVelocitySlot();
 
     }
 	
@@ -32,8 +37,8 @@ public class DashScript : MonoBehaviour {
         if ((Input.GetKeyDown(KeyCode.W) || upSwipe == true) & dashStatus == DashStatus.Ready)               // Весь Dash ниже
         {                                                                                                   // Возможно ты не видишь, но тут костыль для возможности управления на компе (не забыть убрать в финалке)       
             upSwipe = false;
-            universe.GetComponent<SpeedUpScript>().stopSpeedUp = true;
-            universe.GetComponent<Rigidbody2D>().velocity *= dashMultiplier;
+            currentDashSpeed = universeVelocity.rawVelocity * dashMultiplier;
+            universeVelocity.SetVelocity(id, currentDashSpeed);
             dashStatus = DashStatus.Dashing;
             dashEffect.Play();
         }
@@ -51,8 +56,7 @@ public class DashScript : MonoBehaviour {
             {
                 dashEffect.Stop();
                 cameraDashSpeed = 0;
-                universe.GetComponent<Rigidbody2D>().velocity /= dashMultiplier;
-                universe.GetComponent<SpeedUpScript>().stopSpeedUp = false;
+                universeVelocity.SetVelocity(id, 0);
                 dashStatus = DashStatus.Cooldown;
                 currentDashTimer = cooldownDashTimer;
             }

@@ -19,7 +19,7 @@ public class SwipeManager : MonoBehaviour {
         slowMoScript = GameObject.Find("Player").GetComponent<SlowMoScript>();
         dashScript = GameObject.Find("Player").GetComponent<DashScript>();
         dpiScale = GetComponent<DPIScript>().DP_SCALE;
-        print(dpiScale);
+        print("DPI scale: " + dpiScale);
         swipeOffsetX = swipeOffsetX * dpiScale;
         swipeOffsetY = swipeOffsetY * dpiScale;
     }

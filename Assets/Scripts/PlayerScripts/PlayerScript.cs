@@ -8,9 +8,7 @@ public class PlayerScript : MonoBehaviour {
    
     [HideInInspector] public int deathcount = 0;
     public int currentCoins = 0;
-    bool moving = false;
-    private float yVelocity = 0.0F;
-    public float smoothTime = 0.1F;
+    public float smoothTime = 15f;
 
     float targetFloat;
     [HideInInspector] public int current_line = 3;
@@ -64,8 +62,7 @@ public class PlayerScript : MonoBehaviour {
         
 
 
-        /*float newPosition = Mathf.SmoothDamp(transform.position.x, targetFloat , ref yVelocity, smoothTime);
-        transform.position = new Vector3(newPosition, transform.position.y, transform.position.z);*/
+
         transform.position = Vector2.Lerp((Vector2)transform.position, new Vector2(targetFloat, transform.position.y), Time.deltaTime * smoothTime);            // новый способ перемещения
 
     }
@@ -76,6 +73,7 @@ public class PlayerScript : MonoBehaviour {
 
     void FixedUpdate()
     {
+
         if (Input.GetKeyDown(KeyCode.R))
             if (Time.timeScale < 1F)
             {
