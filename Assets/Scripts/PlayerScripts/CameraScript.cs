@@ -19,7 +19,7 @@ public class CameraScript : MonoBehaviour {
 
 	void FixedUpdate ()
     {
-        
+
         line = Player.GetComponent<PlayerScript>().current_line;                                                            // Сдвиг камеры
 
         switch (line)

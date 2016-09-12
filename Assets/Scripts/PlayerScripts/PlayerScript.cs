@@ -8,6 +8,7 @@ public class PlayerScript : MonoBehaviour {
    
     [HideInInspector] public int deathcount = 0;
     public int currentCoins = 0;
+    public int currentAmmo = 10;
     public float smoothTime = 15f;
 
     float targetFloat;
@@ -19,7 +20,6 @@ public class PlayerScript : MonoBehaviour {
 
     void Start()
     {
-
         universe = GameObject.Find("Universe center");
     }
 
@@ -44,7 +44,6 @@ public class PlayerScript : MonoBehaviour {
 
     void Update()
     {
-       
 
         if (Input.GetKeyDown(KeyCode.A) & current_line != 1)           // Возможно ты не видишь, но тут костыль для возможности управления на компе (не забыть убрать в финалке)
         {                                                              // Я сейчас про весь Update()
@@ -58,17 +57,14 @@ public class PlayerScript : MonoBehaviour {
             targetFloat = (current_line - 2) * 2 - 2;
         }
 
-
-        
-
-
+        if (Input.GetKeyDown(KeyCode.F) & current_line != 5)
+        {
+            ShoutingScript.Fire();
+        }
 
         transform.position = Vector2.Lerp((Vector2)transform.position, new Vector2(targetFloat, transform.position.y), Time.deltaTime * smoothTime);            // новый способ перемещения
 
     }
-
-
-
 
 
     void FixedUpdate()
@@ -88,8 +84,6 @@ public class PlayerScript : MonoBehaviour {
     }
 
 
-
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Coin")
@@ -103,7 +97,5 @@ public class PlayerScript : MonoBehaviour {
             deathcount += 1;
         }
     }
-
-   
 
 }
