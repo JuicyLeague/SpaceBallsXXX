@@ -8,7 +8,6 @@ public class SwipeManager : MonoBehaviour {
     public float swipeOffsetX, swipeOffsetY = 50F;
     Vector2 startTouchPosition, currentTouchPosition;
 
-
     PlayerScript playerScript;
     SlowMoScript slowMoScript;
     DashScript dashScript;
@@ -69,7 +68,7 @@ public class SwipeManager : MonoBehaviour {
         if (touch.tapCount == 2)
         {
             // Double tap action
-            ShootingScript.Fire();
+            ShootingScript.Fire(playerScript.equipment, playerScript.transform.position);  // Огонь
             // Привязку делать не стал, т.к. метод static. К нему напрямую ссылаться можно, без потери ресурсов.
         }
     }

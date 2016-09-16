@@ -6,7 +6,8 @@ public class PlayerScript : MonoBehaviour {
 
     [HideInInspector] public int deathcount = 0;
     public int currentCoins = 0;
-    public float reloading = 3;
+    public GameObject equipment;  // Абилка
+    [HideInInspector] public EquipmentScript equipScript;  // Скрипт абилки
     public float smoothTime = 15f;
 
     float targetFloat;
@@ -14,10 +15,11 @@ public class PlayerScript : MonoBehaviour {
 
     GameObject universe;
 
-
     void Start()
     {
         universe = GameObject.Find("Universe center");
+        equipScript = equipment.GetComponent<EquipmentScript>();
+        equipScript.reloading = 0;  // Обнулить время перезарядки
     }
 
     public void TurnLeft()
@@ -41,7 +43,6 @@ public class PlayerScript : MonoBehaviour {
 
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.A) & current_line != 1)           // Возможно ты не видишь, но тут костыль для возможности управления на компе (не забыть убрать в финалке)
         {                                                              // Я сейчас про весь Update()
             current_line -= 1;
@@ -54,26 +55,24 @@ public class PlayerScript : MonoBehaviour {
             targetFloat = (current_line - 2) * 2 - 2;
         }
 
-        if (Input.GetKeyDown(KeyCode.F) & current_line != 5)
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            ShootingScript.Fire();
+            ShootingScript.Fire(equipment, transform.position);  // Огонь!
         }
 
         transform.position = Vector2.Lerp((Vector2)transform.position, new Vector2(targetFloat, transform.position.y), Time.deltaTime * smoothTime);            // новый способ перемещения
-
     }
 
 
     void FixedUpdate()
     {
-
-        if (reloading > 0)
+        if (equipScript.reloading > 0)
         {
-            reloading -= Time.deltaTime;
+            equipScript.reloading -= Time.deltaTime;
         }
         else
         {
-            reloading = 0;
+            equipScript.reloading = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -86,7 +85,6 @@ public class PlayerScript : MonoBehaviour {
             
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
-
     }
 
 

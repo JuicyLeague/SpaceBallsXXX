@@ -2,12 +2,14 @@
 using System.Collections;
 
 public class CreatorScript : MonoBehaviour {
+
     public GameObject[] Patterns;
     public float spawnerTimer;
     public int minCondition, maxCondition;
     int condition;
     float lastPosition;
     float timer;
+
 	// Use this for initialization
 	void Awake () {
         timer = spawnerTimer;
