@@ -22,7 +22,6 @@ public class SpeedUpScript : MonoBehaviour {                // Данный ск
 
     void Start () {
         targetTime *= 60;               // Перевод в секунды
-        print(VelocityArray.Length);
         rawVelocity = VelocityArray[0] = startingSpeed;
         rb2d = gameObject.GetComponent<Rigidbody2D>();
         rb2d.velocity = new Vector2(0, rawVelocity);
