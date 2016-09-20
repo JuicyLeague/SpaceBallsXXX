@@ -4,20 +4,44 @@ using System.Collections;
 public class SwipeManager : MonoBehaviour {
     float dpiScale;                                                              // px = dp * (dpi / 160)
     Touch touch;
-    bool fingerTrack, cancelSwipe = false;
+    bool fingerTrack, cancelSwipe = false;                                     
     public float swipeOffsetX, swipeOffsetY = 50F;
     Vector2 startTouchPosition, currentTouchPosition;
 
-
     PlayerScript playerScript;
-    SlowMoScript slowMoScript;
-    DashScript dashScript;
+    GameObject GameManager;
+    AbilityHolder UpAbility, DownAbility, DoubleAbility;
 
-	// Use this for initialization
-	void Start () {
+    void GameManagerInitialization()
+    {
+        GameManager = GameObject.Find("GameManager");
+        foreach (AbilityHolder i in GameManager.GetComponents<AbilityHolder>())
+        {
+            switch (i.HolderMove)
+            {
+                case AbilityHolder.AbilityHolderMove.Up:
+                    UpAbility = i;
+                    break;
+
+                case AbilityHolder.AbilityHolderMove.Down:
+                    DownAbility = i;
+                    break;
+
+                case AbilityHolder.AbilityHolderMove.Double:
+                    DoubleAbility = i;
+                    break;
+
+                default:
+                    break;
+
+            }
+        }
+    }
+
+    void Start () {
+        GameManagerInitialization();
         playerScript = GameObject.Find("Player").GetComponent<PlayerScript>();
-        slowMoScript = GameObject.Find("Player").GetComponent<SlowMoScript>();
-        dashScript = GameObject.Find("Player").GetComponent<DashScript>();
+
         dpiScale = GetComponent<DPIScript>().DP_SCALE;
         print("DPI scale: " + dpiScale);
         swipeOffsetX = swipeOffsetX * dpiScale;
@@ -25,6 +49,18 @@ public class SwipeManager : MonoBehaviour {
     }
 	
 	void Update () {
+
+        // Простой контроллер на PC для тестов
+        if (Input.GetKeyDown(KeyCode.W))
+            UpAbility.currentAbility.ActivateAbility = true;
+        if (Input.GetKeyDown(KeyCode.Space))
+            DownAbility.currentAbility.ActivateAbility = true;
+        if (Input.GetKeyDown(KeyCode.F))
+            DoubleAbility.currentAbility.ActivateAbility = true;
+
+
+
+
         if (Input.touchCount > 0)
             touch = Input.GetTouch(0);
 
@@ -51,11 +87,13 @@ public class SwipeManager : MonoBehaviour {
                 if (Mathf.Abs(currentTouchPosition.y - startTouchPosition.y) > swipeOffsetY)
                 {
                     if (currentTouchPosition.y > startTouchPosition.y)
-                        dashScript.upSwipe = true;
-                    // up move
+                        if (UpAbility!= null)
+                            UpAbility.currentAbility.ActivateAbility = true;
+                        // up move
                     else
-                        slowMoScript.downSwipe = true;
-                    //down move
+                        if (DownAbility != null)
+                            DownAbility.currentAbility.ActivateAbility = true;
+                        //down move
                     cancelSwipe = true;
                 }
             }
@@ -66,11 +104,12 @@ public class SwipeManager : MonoBehaviour {
         if (Input.touchCount == 0)
             cancelSwipe = false;                            // Swipe end
 
-        if (touch.tapCount == 2)
+        if (touch.tapCount == 2)            // Дабл тап переделать, дефолтный метод юнити полное говно
         {
             // Double tap action
-            ShootingScript.Fire();
-            // Привязку делать не стал, т.к. метод static. К нему напрямую ссылаться можно, без потери ресурсов.
+            if (DoubleAbility != null)
+                DoubleAbility.currentAbility.ActivateAbility = true;
+            
         }
     }
     void FixedUpdate()
