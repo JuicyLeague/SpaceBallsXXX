@@ -1,20 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SlowMoScript : AbilityClassScript {
-   // public enum AbilityFase { Ready, Acting, Cooldown };
-   // public AbilityFase abilityState = AbilityFase.Ready;
-   //// new public bool ActivateAbility = false;          Не указано т.к. лежит в Родителе (если вдруг значение родителя и дочерних классов копируются то эт говно)
-   // public float actingTimer, cooldownTimer;
-   // public float currentTimer;
-    public  float timeScale;
+public class LightAmmoScript : AbilityClassScript{
+
+    private GameObject ammoPrefab, ammoClone;
+    private GameObject player;
+    private float speed;
 
 
-
-    void Start()
+	// Use this for initialization
+	void Start ()
     {
-        actingTimer *= timeScale;
-        print("SlowMo ability attached!");
+        speed = GameObject.Find("Universe center").GetComponent<SpeedUpScript>().totalVelocity;
+        player = GameObject.Find("Player");
+        ammoPrefab = Resources.Load<GameObject>("Ammo");
+        print("Light ammo ability attached!");
     }
 
     void FixedUpdate()
@@ -22,7 +22,7 @@ public class SlowMoScript : AbilityClassScript {
         if (abilityState == AbilityFase.Ready & ActivateAbility == true)
         {
             ActivateAbility = false;
-            abilityState = AbilityFase.Acting;      
+            abilityState = AbilityFase.Acting;
             Ready();
             currentTimer = actingTimer;
         }
@@ -42,6 +42,7 @@ public class SlowMoScript : AbilityClassScript {
                     Cooldown();
                     abilityState = AbilityFase.Ready;
                     break;
+
             }
         }
     }
@@ -49,17 +50,12 @@ public class SlowMoScript : AbilityClassScript {
 
     public override void Ready()                                                    // Сделано в виде методов без особой на то причины
     {
-        if (Time.timeScale == 1.0F)
-        {
-            Time.timeScale = timeScale;
-            Time.fixedDeltaTime = 0.02F * Time.timeScale;
-        }
+        ammoClone = Instantiate(ammoPrefab, player.transform.position, Quaternion.identity) as GameObject;
+        ammoClone.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 15 + speed);
     }
 
     public override void Acting()
     {
-        Time.timeScale = 1.0F;
-        Time.fixedDeltaTime = 0.02F * Time.timeScale;
     }
 
     public override void Cooldown()

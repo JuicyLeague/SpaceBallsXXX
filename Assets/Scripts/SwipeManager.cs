@@ -52,11 +52,11 @@ public class SwipeManager : MonoBehaviour {
 
         // Простой контроллер на PC для тестов
         if (Input.GetKeyDown(KeyCode.W))
-            UpAbility.currentAbility.ActivateAbility = true;
+            UpAbility.currentAbility.TryActivate();
         if (Input.GetKeyDown(KeyCode.Space))
-            DownAbility.currentAbility.ActivateAbility = true;
+            DownAbility.currentAbility.TryActivate();
         if (Input.GetKeyDown(KeyCode.F))
-            DoubleAbility.currentAbility.ActivateAbility = true;
+            DoubleAbility.currentAbility.TryActivate();
 
 
 
@@ -88,12 +88,12 @@ public class SwipeManager : MonoBehaviour {
                 {
                     if (currentTouchPosition.y > startTouchPosition.y)
                         if (UpAbility!= null)
-                            UpAbility.currentAbility.ActivateAbility = true;
+                            UpAbility.currentAbility.TryActivate();
                         // up move
-                    else
+                        else
                         if (DownAbility != null)
-                            DownAbility.currentAbility.ActivateAbility = true;
-                        //down move
+                            DownAbility.currentAbility.TryActivate();
+                    //down move
                     cancelSwipe = true;
                 }
             }
@@ -108,8 +108,8 @@ public class SwipeManager : MonoBehaviour {
         {
             // Double tap action
             if (DoubleAbility != null)
-                DoubleAbility.currentAbility.ActivateAbility = true;
-            
+                DoubleAbility.currentAbility.TryActivate();
+
         }
     }
     void FixedUpdate()

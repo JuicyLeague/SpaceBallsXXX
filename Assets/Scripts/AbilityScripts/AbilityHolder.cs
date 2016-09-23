@@ -5,6 +5,7 @@ public class AbilityHolder : MonoBehaviour {
 
 
     public enum AbilityHolderMove { Up, Down, Double };
+    
     public AbilityHolderMove HolderMove = AbilityHolderMove.Down;
     [HideInInspector]public AbilityClassScript currentAbility;
     public GameObject AbilityPrefab;

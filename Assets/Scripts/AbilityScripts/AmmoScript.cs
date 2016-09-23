@@ -3,14 +3,6 @@ using System.Collections;
 
 public class AmmoScript : MonoBehaviour {
 
-    float speed;
-
-	// Use this for initialization
-	void Start () {
-        speed = GameObject.Find("Universe center").GetComponent<SpeedUpScript>().totalVelocity;
-        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 15 + speed);
-	}
-
     void OnTriggerEnter2D(Collider2D other)
     {
         // other.tag == "WallHolder" || 
