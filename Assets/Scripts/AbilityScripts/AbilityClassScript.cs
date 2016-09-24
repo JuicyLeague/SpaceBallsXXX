@@ -4,11 +4,12 @@ using System.Collections;
 public abstract class AbilityClassScript : MonoBehaviour {
 
     public enum AbilityFase { Ready, Acting, Cooldown };
-    public AbilityFase abilityState = AbilityFase.Ready;
-    public float actingTimer, cooldownTimer;
-    public float currentTimer;
+    [HideInInspector]public AbilityFase abilityState = AbilityFase.Ready;
 
-    public bool ActivateAbility = false;
+    public float actingTimer, cooldownTimer;
+    [HideInInspector]public float currentTimer;
+
+    [HideInInspector]public bool ActivateAbility = false;
 
     public void TryActivate()
     {

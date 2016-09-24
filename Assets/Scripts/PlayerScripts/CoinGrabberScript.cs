@@ -7,8 +7,7 @@ public class CoinGrabberScript : MonoBehaviour
     enum CapacityState {Penalty, Normal, Accelerate };
     CapacityState capacityState = CapacityState.Normal;
 
-    [HideInInspector]
-    public int currentCoins = 0;
+    [HideInInspector]public int currentCoins = 0;
 
     public int fuelCapacity = 100;
     public float fuelConsumption, accelerateFuelConsuption, fuelPenalty, acceleration;
@@ -97,8 +96,6 @@ public class CoinGrabberScript : MonoBehaviour
             currentTimer = tickRate;
             consuptionCall = !consuptionCall;
         }
-
-        
     }
 
     void OnTriggerEnter2D(Collider2D other)

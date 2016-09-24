@@ -6,20 +6,17 @@ public class PlayerScript : MonoBehaviour {
 
     [HideInInspector] public int deathcount = 0;
     public int currentCoins = 0;
-   // public GameObject equipment;  // Абилка
-   // [HideInInspector] public EquipmentScript equipScript;  // Скрипт абилки
+    [HideInInspector]public int coinMultiplier = 1;
     public float smoothTime = 15f;
 
-    float targetFloat;
     [HideInInspector] public int current_line = 3;
+    float targetFloat;
 
     GameObject universe;
 
     void Start()
     {
         universe = GameObject.Find("Universe center");
-        /*equipScript = equipment.GetComponent<EquipmentScript>();
-        equipScript.reloading = 0;  // Обнулить время перезарядки*/
     }
 
     public void TurnLeft()
@@ -55,25 +52,12 @@ public class PlayerScript : MonoBehaviour {
             targetFloat = (current_line - 2) * 2 - 2;
         }
 
-      /*  if (Input.GetKeyDown(KeyCode.F))
-        {
-            ShootingScript.Fire(equipment, transform.position);  // Огонь!
-        }*/
-
         transform.position = Vector2.Lerp((Vector2)transform.position, new Vector2(targetFloat, transform.position.y), Time.deltaTime * smoothTime);            // новый способ перемещения
     }
 
 
     void FixedUpdate()
     {
-        /*if (equipScript.reloading > 0)
-        {
-            equipScript.reloading -= Time.deltaTime;
-        }
-        else
-        {
-            equipScript.reloading = 0;
-        }*/
 
         if (Input.GetKeyDown(KeyCode.R))
             if (Time.timeScale < 1F)
@@ -92,7 +76,7 @@ public class PlayerScript : MonoBehaviour {
     {
         if (other.tag == "Coin")
         {
-            currentCoins += 1;
+            currentCoins += 1 * coinMultiplier;
             Destroy(other.gameObject);
         }
 

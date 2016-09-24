@@ -35,5 +35,4 @@ public class AbilityHolder : MonoBehaviour {
         ChangeAbility(AbilityPrefabName);
     }
 
-
 }
