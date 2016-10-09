@@ -9,14 +9,17 @@ public class AbilityHolder : MonoBehaviour {
     public AbilityHolderMove HolderMove = AbilityHolderMove.Down;
     [HideInInspector]public AbilityClassScript currentAbility;
     public GameObject AbilityPrefab;
-    public string AbilityPrefabName = "SlowMoAbility";          // Загрузится на старте
+    public string AbilityPrefabName;          // Загрузится на старте
 
 
     public void ChangeAbility(string abilityPrefName)
     {
         Destroy(AbilityPrefab);
-        abilityPrefName = "Abilities/" + abilityPrefName;       // Не нужно писать папку, только название префаба
-        AbilityPrefab = Instantiate(Resources.Load<GameObject>(abilityPrefName));
+        if (abilityPrefName != "")
+        {
+            abilityPrefName = "Abilities/" + abilityPrefName;       // Не нужно писать папку, только название префаба
+            AbilityPrefab = Instantiate(Resources.Load<GameObject>(abilityPrefName));
+        }
 
         if (AbilityPrefab != null)
         {
@@ -32,6 +35,7 @@ public class AbilityHolder : MonoBehaviour {
 
     void Start()
     {
+        AbilityPrefabName = PlayerPrefs.GetString(HolderMove.ToString() + "Ability");
         ChangeAbility(AbilityPrefabName);
     }
 

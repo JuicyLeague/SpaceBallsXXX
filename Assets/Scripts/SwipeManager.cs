@@ -52,11 +52,14 @@ public class SwipeManager : MonoBehaviour {
 
         // Простой контроллер на PC для тестов
         if (Input.GetKeyDown(KeyCode.W))
-            UpAbility.currentAbility.TryActivate();
+            if(UpAbility != null)
+                UpAbility.currentAbility.TryActivate();
         if (Input.GetKeyDown(KeyCode.Space))
-            DownAbility.currentAbility.TryActivate();
+            if (UpAbility != null)
+                DownAbility.currentAbility.TryActivate();
         if (Input.GetKeyDown(KeyCode.F))
-            DoubleAbility.currentAbility.TryActivate();
+            if (UpAbility != null)
+                DoubleAbility.currentAbility.TryActivate();
 
 
 

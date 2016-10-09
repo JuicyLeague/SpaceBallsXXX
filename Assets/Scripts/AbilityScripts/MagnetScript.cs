@@ -24,7 +24,6 @@ public class MagnetScript : AbilityClassScript
             ActivateAbility = false;
             abilityState = AbilityFase.Acting;
             //Ready();
-            print("Magnet!");
             currentTimer = actingTimer;
         }
 

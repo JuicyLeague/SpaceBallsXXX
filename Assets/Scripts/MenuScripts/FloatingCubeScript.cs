@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class FloatingCubeScript : MonoBehaviour {
+
     public Vector3 rot;
     public float rotChange;  // Время, после которого вращение будет изменено
+    public bool canChangeLvl = true;
+
     float currentTimer;
     int reverse = 1;
     bool lvlChanging = false;
@@ -13,24 +17,22 @@ public class FloatingCubeScript : MonoBehaviour {
     float LerpBoardPosition;
     Camera camComp;
     AsyncOperation ao;
-	// Use this for initialization
-	void Start () {
+
+    private MenuButtonScript[] uiButtons;
+
+    // Use this for initialization
+    void Start ()
+    {
+        uiButtons = FindObjectsOfType<MenuButtonScript>();
         currentTimer = rotChange;
         camComp = Cam.GetComponent<Camera>();
-        
-        
+        print(Screen.width + ":" + Screen.height);
+        StartUiCoroutine("Show");
     }
 	
  
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            lvlChanging = true;
-            ao = SceneManager.LoadSceneAsync(1);
-            ao.allowSceneActivation = false;
-
-        }
 
         if (lvlChanging)
         {
@@ -74,5 +76,24 @@ public class FloatingCubeScript : MonoBehaviour {
     int RandomSign()
     {
         return Random.Range(0, 2) * 2 - 1;
-    } 
+    }
+
+    void OnMouseDown()
+    {
+        if (canChangeLvl)
+        {
+            lvlChanging = true;
+            ao = SceneManager.LoadSceneAsync(1);
+            ao.allowSceneActivation = false;
+            StartUiCoroutine("Hide");
+        }
+    }
+
+    void StartUiCoroutine(string coroutineName)
+    {
+        foreach (MenuButtonScript i in uiButtons)
+        {
+            i.StartCoroutine(coroutineName);
+        }
+    }
 }
